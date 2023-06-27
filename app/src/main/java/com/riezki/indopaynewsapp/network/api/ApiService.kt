@@ -1,6 +1,7 @@
 package com.riezki.indopaynewsapp.network.api
 
-import com.riezki.indopaynewsapp.utils.Key
+import com.riezki.indopaynewsapp.model.response.NewsResponse
+import com.riezki.indopaynewsapp.utils.Constraint
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,8 +12,8 @@ interface ApiService {
         @Query(COUNTRY) countryCode: String = "id",
         @Query(PAGE) pageNumber: Int = 1,
         @Query(SIZE) pageSize: Int = 20,
-        @Query(API_KEYS) apiKey: String = Key.API_KEY
-    )
+        @Query(API_KEYS) apiKey: String = Constraint.API_KEY
+    ) : NewsResponse
 
 
     companion object {

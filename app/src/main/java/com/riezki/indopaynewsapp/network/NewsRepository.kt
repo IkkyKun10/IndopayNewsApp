@@ -13,27 +13,25 @@ class NewsRepository(private val apiService: ApiService, private val database: N
 
     fun getAllNews(): LiveData<Resource<List<NewsEntity>>> {
         return liveData {
-            emit(Resource.Loading(null))
+            val oldData = database.newsDao().getAllNews()
+            emit(Resource.Loading(data = oldData))
             try {
                 val response = apiService.getHeadlineNews()
                 val articles = response.articles
+                val newsList = articles.map { news ->
+                    NewsEntity(
+                        id = news.id,
+                        title = news.title,
+                        publishedAt = news.publishedAt,
+                        urlToImage = news.urlToImage,
+                        url = news.url,
+                        author = news.author,
+                        description = news.description,
+                    )
+                }
                 database.withTransaction {
-                    val newsList = articles.map { news ->
-                        NewsEntity(
-                            id = news.id,
-                            title = news.title,
-                            publishedAt = news.publishedAt,
-                            urlToImage = news.urlToImage,
-                            url = news.url,
-                            author = news.author,
-                            description = news.description,
-                        )
-                    }
                     database.newsDao().deleteAll()
                     database.newsDao().insertAllToLocal(newsList)
-
-                    val localData = database.newsDao().getAllNews()
-                    emit(Resource.Success(localData))
                 }
 
             } catch (e: Exception) {
@@ -41,6 +39,7 @@ class NewsRepository(private val apiService: ApiService, private val database: N
                 emit(Resource.Error(statusCode = e.message.hashCode(), message = e.message.toString(), data = null))
             }
 
+            emit(Resource.Success(data = database.newsDao().getAllNews()))
         }
     }
 

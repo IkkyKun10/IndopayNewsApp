@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-
 @Entity(tableName = "news_entity")
 @Parcelize
 data class NewsEntity(
@@ -28,4 +27,7 @@ data class NewsEntity(
 
     @field:ColumnInfo(name = "author")
     val author: String? = null,
+
+    @field:ColumnInfo(name = "description")
+    val description: String? = null,
 ) : Parcelable

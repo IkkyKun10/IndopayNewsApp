@@ -6,7 +6,6 @@ import com.riezki.indopaynewsapp.network.NewsRepository
 import com.riezki.indopaynewsapp.network.api.ApiConfig
 
 object Injection {
-
     fun provideInjection(context: Context) : NewsRepository {
         val apiService = ApiConfig.apiService(context)
         val database = NewsDatabase.getInstance(context)

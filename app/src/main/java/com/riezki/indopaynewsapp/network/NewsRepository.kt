@@ -11,7 +11,7 @@ import com.riezki.indopaynewsapp.utils.Resource
 
 class NewsRepository(private val apiService: ApiService, private val database: NewsDatabase) {
 
-    fun getAllNews() : LiveData<Resource<List<NewsEntity>>> {
+    fun getAllNews(): LiveData<Resource<List<NewsEntity>>> {
         return liveData {
             emit(Resource.Loading(null))
             try {
@@ -25,20 +25,22 @@ class NewsRepository(private val apiService: ApiService, private val database: N
                             publishedAt = news.publishedAt,
                             urlToImage = news.urlToImage,
                             url = news.url,
-                            author = news.author
+                            author = news.author,
+                            description = news.description,
                         )
                     }
                     database.newsDao().deleteAll()
                     database.newsDao().insertAllToLocal(newsList)
-                }
 
-                val localData = database.newsDao().getAllNews()
-                emit(Resource.Success(localData))
+                    val localData = database.newsDao().getAllNews()
+                    emit(Resource.Success(localData))
+                }
 
             } catch (e: Exception) {
                 Log.e("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
-                emit(Resource.Error(statusCode = e.hashCode(), message = e.message.toString(), data = null))
+                emit(Resource.Error(statusCode = e.message.hashCode(), message = e.message.toString(), data = null))
             }
+
         }
     }
 
@@ -46,7 +48,7 @@ class NewsRepository(private val apiService: ApiService, private val database: N
         @Volatile
         private var instance: NewsRepository? = null
 
-        fun getInstance(apiService: ApiService, database: NewsDatabase) : NewsRepository {
+        fun getInstance(apiService: ApiService, database: NewsDatabase): NewsRepository {
             return instance ?: synchronized(this) {
                 instance ?: NewsRepository(apiService, database)
             }.also {

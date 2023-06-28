@@ -18,8 +18,12 @@ class ViewModelFactory(private val repository: NewsRepository) : ViewModelProvid
     }
 
     companion object {
+        @Volatile
+        private var instance: ViewModelFactory? = null
         fun getInstance(context: Context) : ViewModelFactory {
-            return ViewModelFactory(Injection.provideInjection(context))
+            return instance ?: synchronized(this) {
+                instance ?: ViewModelFactory(Injection.provideInjection(context))
+            }.also { instance = it }
         }
     }
 }

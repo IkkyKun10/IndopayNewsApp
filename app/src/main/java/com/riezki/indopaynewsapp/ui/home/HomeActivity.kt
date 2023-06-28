@@ -155,13 +155,16 @@ class HomeActivity : AppCompatActivity() {
     private fun getCityName(latitude: Double, longitude: Double) : String {
         var cityName: String? = ""
         var countryName: String? = ""
-        var geocoder: Geocoder? = Geocoder(this, Locale.getDefault())
-        var address = geocoder?.getFromLocation(latitude, longitude, 3)
+        val geocoder: Geocoder = Geocoder(this, Locale.getDefault())
+        val address = geocoder.getFromLocation(latitude, longitude, 3)
 
-        cityName = address?.get(0)?.locality
+        cityName = address?.get(0)?.subAdminArea
         countryName = address?.get(0)?.countryName
+        val area = address?.get(0)?.adminArea
+        val subArea = address?.get(0)?.locality
+        val subLocal = address?.get(0)?.subLocality
         Log.d("Debug:", "Your City: $cityName ; your Country $countryName")
 
-        return cityName as String
+        return String(StringBuilder("$countryName, $cityName, \n$area $subArea $subLocal"))
     }
 }

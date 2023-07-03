@@ -11,7 +11,8 @@ interface ApiService {
         @Query(COUNTRY) countryCode: String = "id",
         @Query(PAGE) pageNumber: Int = 1,
         @Query(SIZE) pageSize: Int = 20,
-        @Query(API_KEYS) apiKey: String = Constraint.API_KEY
+        @Query(API_KEYS) apiKey: String = Constraint.API_KEY,
+        @Query(CATEGORY) category: String? = "general",
     ) : NewsResponse
 
 
@@ -20,5 +21,6 @@ interface ApiService {
         const val PAGE = "page"
         const val SIZE = "pageSize"
         const val API_KEYS = "apiKey"
+        const val CATEGORY = "category"
     }
 }

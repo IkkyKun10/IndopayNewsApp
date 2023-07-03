@@ -11,12 +11,12 @@ import com.riezki.indopaynewsapp.utils.Resource
 
 class NewsRepository(private val apiService: ApiService, private val database: NewsDatabase) {
 
-    fun getAllNews(): LiveData<Resource<List<NewsEntity>>> {
+    fun getAllNews(category: String?): LiveData<Resource<List<NewsEntity>>> {
         return liveData {
             val oldData = database.newsDao().getAllNews()
             emit(Resource.Loading(data = oldData))
             try {
-                val response = apiService.getHeadlineNews()
+                val response = apiService.getHeadlineNews(category = category)
                 val articles = response.articles
                 val newsList = articles.map { news ->
                     NewsEntity(

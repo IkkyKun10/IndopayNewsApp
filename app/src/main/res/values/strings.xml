@@ -12,4 +12,7 @@
     <string name="longitude_info">Longitude: %s</string>
     <string name="current_location">Current Location</string>
     <string name="name_of_city">Nama Kota: \n%s</string>
+    <string name="health_news">Health News</string>
+    <string name="science_news">Science News</string>
+    <string name="sports_news">Sports News</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/category_health"
+        android:title="@string/health_news"
+        android:icon="@drawable/ic_newspaper"
+        android:contentDescription="@string/health_news"
+        />
+
+    <item
+        android:id="@+id/category_science"
+        android:title="@string/science_news"
+        android:icon="@drawable/ic_newspaper"
+        android:contentDescription="@string/science_news"/>
+
+    <item
+        android:id="@+id/category_sports"
+        android:title="@string/sports_news"
+        android:icon="@drawable/ic_newspaper"
+        android:contentDescription="@string/sports_news"/>
+
+</menu>

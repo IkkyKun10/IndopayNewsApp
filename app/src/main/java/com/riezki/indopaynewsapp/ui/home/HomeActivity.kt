@@ -59,8 +59,87 @@ class HomeActivity : AppCompatActivity() {
 
             binding.latText.text = getString(R.string.latitude_info, currentLocation?.latitude.toString())
             binding.lonText.text = getString(R.string.longitude_info, currentLocation?.longitude.toString())
-            binding.cityName.text = getString(R.string.name_of_city, getCityName(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0))
+            binding.cityName.text = getString(
+                R.string.name_of_city,
+                getCityName(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0)
+            )
             binding.progressBarLoc.visibility = View.GONE
+        }
+
+        //Handle Category News
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.category_health -> {
+                    viewModel.getHeadlineNews(category = CATEGORY_HEALTH).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Resource.Loading -> {
+                                    binding.progressBarRv.visibility = View.VISIBLE
+                                }
+
+                                is Resource.Success -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    newsAdapter.submitList(result.data)
+                                }
+
+                                is Resource.Error -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    Toast.makeText(this, "Error get data $CATEGORY_HEALTH", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+
+                R.id.category_science -> {
+                    viewModel.getHeadlineNews(category = CATEGORY_SCIENCE).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Resource.Loading -> {
+                                    binding.progressBarRv.visibility = View.VISIBLE
+                                }
+
+                                is Resource.Success -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    newsAdapter.submitList(result.data)
+                                }
+
+                                is Resource.Error -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    Toast.makeText(this, "Error get data $CATEGORY_SCIENCE", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+
+                R.id.category_sports -> {
+                    viewModel.getHeadlineNews(category = CATEGORY_SPORTS).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Resource.Loading -> {
+                                    binding.progressBarRv.visibility = View.VISIBLE
+                                }
+
+                                is Resource.Success -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    newsAdapter.submitList(result.data)
+                                }
+
+                                is Resource.Error -> {
+                                    binding.progressBarRv.visibility = View.GONE
+                                    Toast.makeText(this, "Error get data $CATEGORY_SPORTS", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 
@@ -152,7 +231,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCityName(latitude: Double, longitude: Double) : String {
+    private fun getCityName(latitude: Double, longitude: Double): String {
         var cityName: String? = ""
         var countryName: String? = ""
         val geocoder: Geocoder = Geocoder(this, Locale.getDefault())
@@ -166,5 +245,13 @@ class HomeActivity : AppCompatActivity() {
         Log.d("Debug:", "Your City: $cityName ; your Country $countryName")
 
         return String(StringBuilder("$countryName, $cityName, \n$area $subArea $subLocal"))
+    }
+
+    companion object {
+
+        const val CATEGORY_HEALTH = "health"
+        const val CATEGORY_SPORTS = "sports"
+        const val CATEGORY_SCIENCE = "science"
+
     }
 }

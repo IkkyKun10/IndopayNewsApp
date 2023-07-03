@@ -8,8 +8,8 @@ import com.riezki.indopaynewsapp.utils.Resource
 
 class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
 
-    fun getHeadlineNews() : LiveData<Resource<List<NewsEntity>>> {
-        return repository.getAllNews()
+    fun getHeadlineNews(category: String? = "general") : LiveData<Resource<List<NewsEntity>>> {
+        return repository.getAllNews(category)
     }
 
 }

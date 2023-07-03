@@ -18,6 +18,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.material.snackbar.Snackbar
 import com.riezki.indopaynewsapp.R
 import com.riezki.indopaynewsapp.adapter.NewsAdapter
 import com.riezki.indopaynewsapp.databinding.ActivityHomeBinding
@@ -55,14 +56,26 @@ class HomeActivity : AppCompatActivity() {
 
         binding.shareLocBtn.setOnClickListener {
             binding.progressBarLoc.visibility = View.VISIBLE
-            getMyLastLocation()
 
-            binding.latText.text = getString(R.string.latitude_info, currentLocation?.latitude.toString())
-            binding.lonText.text = getString(R.string.longitude_info, currentLocation?.longitude.toString())
-            binding.cityName.text = getString(
-                R.string.name_of_city,
-                getCityName(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0)
-            )
+            try {
+                getMyLastLocation()
+
+                binding.latText.text = getString(R.string.latitude_info, currentLocation?.latitude.toString())
+                binding.lonText.text = getString(R.string.longitude_info, currentLocation?.longitude.toString())
+                binding.cityName.text = getString(
+                    R.string.name_of_city,
+                    getCityName(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0)
+                )
+            } catch (e: Exception) {
+                Snackbar.make(binding.root, "Acces Location Not Granted", Snackbar.LENGTH_SHORT).show()
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+
             binding.progressBarLoc.visibility = View.GONE
         }
 
@@ -244,7 +257,7 @@ class HomeActivity : AppCompatActivity() {
         val subLocal = address?.get(0)?.subLocality
         Log.d("Debug:", "Your City: $cityName ; your Country $countryName")
 
-        return String(StringBuilder("$countryName, $cityName, \n$area $subArea $subLocal"))
+        return String(StringBuilder("$countryName, $area \n$cityName, $subArea, $subLocal"))
     }
 
     companion object {
